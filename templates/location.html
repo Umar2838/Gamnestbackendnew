@@ -1,0 +1,88 @@
+{% load static %}
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+ <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" href="{% static 'assets/logo.ico'%}" type="image/ico" sizes="32x32">    <link href="{%static 'css/style.css'%}" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <title>Gamnest | Location</title>
+</head>
+<body>
+    <div class="location-wrapper p-4">
+        <div class="relative flex items-center justify-center w-full mt-2">
+            <a href="./gamepage01.html" class="absolute left-0">
+                <img src="{% static 'assets/back.png'%}" alt="Back" class="w-6 h-6">
+            </a>
+            <div class="font-semibold text-xl">Location</div>
+        </div>
+        
+        <!-- Search -->
+        <div class="relative search-wrapper">
+            <input type="text" class="search w-full" placeholder="Search game" name="search" />
+            <img class="search-icon" src="{%static 'assets/search-normal.png'%}" />
+            <img class="filter-icon" src="{%static 'assets/filter.png'%}" />
+        </div>
+        
+        <!-- Locations with tick icons -->
+        <div class="location-div relative flex items-center gap-2 cursor-pointer">
+            <img src="{%static 'assets/Frame 33783.png'%}" />Use Current Location
+            <img src="{%static 'assets/tick.png'%}" alt="Tick" class="tick-icon ml-auto" />
+        </div>
+        <hr />
+        <div class="location-div relative flex items-center gap-2 cursor-pointer"> 
+            Fun Land Arcade 
+            <img src="{%static 'assets/tick.png'%}" alt="Tick" class="tick-icon ml-auto" />
+        </div>
+        <hr />
+        <div class="location-div relative flex items-center gap-2 cursor-pointer"> 
+            Arcade Plaza 
+            <img src="{%static 'assets/tick.png'%}" alt="Tick" class="tick-icon ml-auto" />
+        </div>
+        <hr />
+        <div class="location-div relative flex items-center gap-2 cursor-pointer"> 
+            Retro Arcade 
+            <img src="{%static 'assets/tick.png'%}" alt="Tick" class="tick-icon ml-auto" />
+        </div>
+        <hr />
+        <div class="location-div relative flex items-center gap-2 cursor-pointer"> 
+            Game Heaven 
+            <img src="{%static 'assets/tick.png'%}" alt="Tick" class="tick-icon ml-auto" />
+        </div>
+        <hr />
+        <div class="location-div relative flex items-center gap-2 cursor-pointer"> 
+            Play Land Arcade 
+            <img src="{%static 'assets/tick.png'%}" alt="Tick" class="tick-icon ml-auto" />
+        </div>
+        <hr />
+        
+        <!-- Logout Button -->
+        <a href="loginshow">
+            <button type="button"
+                class="btn bottom-4 right-0 absolute next-btn hover:bg-red-300 hover:text-white py-2 rounded-full border border-red-400 font-bold text-red-400"
+                style="width: calc(100% - 40px); left: 20px; right: 20px;">
+                <div class="flex items-center justify-center">
+                    <img src="{%static 'assets/logout.png'%}" alt="Logout" /> Logout
+                </div>
+            </button>
+        </a>
+    </div>
+
+    <script>
+        // Get all location-div elements
+        const locations = document.querySelectorAll('.location-div');
+
+        // Add click event listener to each location
+        locations.forEach(location => {
+            location.addEventListener('click', function () {
+                // Remove font-bold class and hide tick for all locations
+                locations.forEach(loc => loc.classList.remove('font-bold', 'selected'));
+
+                // Add font-bold class and show tick for the clicked location
+                location.classList.add('font-bold', 'selected');
+            });
+        });
+    </script>
+</body>
+</html>

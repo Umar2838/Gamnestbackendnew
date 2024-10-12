@@ -1,0 +1,61 @@
+{% load static %}
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+ <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" href="{% static 'assets/logo.ico'%}" type="image/ico" sizes="32x32">    <link href="{%static 'css/style.css'%}" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <title>Gamnest |Payment Confirmation </title>
+</head>
+<body>
+    <div class="p-4"> 
+        <div class="relative flex items-center justify-center  w-full  mt-2">
+            <a href="./gamepage01.html" class="absolute left-0">
+                <img src="{% static 'assets/back.png'%}" alt="Back" class="w-6 h-6">
+            </a>
+            <div class="font-semibold text-xl">
+                Confirmation
+            </div>
+            </div>
+            <h1 class="font-bold text-lg pt-10" >Payment Details</h1>
+            <div class="flex justify-between items-center pt-5 pb-2" >
+                <div class="text-[#666666]" >Product name</div>
+                <div class="productname" >Single ticket</div>
+            </div>
+            <hr />
+            <div class="flex justify-between items-center pt-5 pb-2" >
+                <div class="text-[#666666]" >Product subtotal </div>
+                <div class="productsubtotal" >€5.00</div>
+            </div>
+            <hr />
+            <div class="flex justify-between items-center pt-2 pb-2" >
+                <div class="text-[#666666]" >Discount</div>
+                <div class="productdiscount" >-€0.00</div>
+            </div>
+            <hr />
+            <div class="flex justify-between items-center pt-2 pb-2" >
+                <div class="text-[#666666]" >Total Payment</div>
+                <div class="productdiscount" >€5.00</div>
+            </div>
+                <hr />
+                <h1 class="font-bold text-lg pt-10" >Payment Method</h1>
+                <div class="flex items-cente pt-5 " >
+                    <img src="{%static '/assets/Logo (1).png'%}" /> &nbsp; Google Pay
+                    <button class="ml-auto border-2 px-4 font-bold p-2 rounded-2xl">Change</button>
+                </div>
+                <a   href="successfulpayment">
+                    <button type="button"
+                        class="btn fixed bottom-10 left-4 next-btn left-0 w-11/12  items-center hover:bg-yellow-400  py-2  rounded-full border border-gray-300 bg-yellow-400 font-bold text-gray-700">
+                        Buy Now <span class="font-normal" >€5.00</span>
+                    </button>
+                </a>
+                
+            </div>
+           
+  
+    <script src="https://cdn.tailwindcss.com"></script>
+
+</body>
+</html>
