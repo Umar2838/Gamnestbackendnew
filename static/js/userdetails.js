@@ -1,66 +1,126 @@
-    // Function to load the selected image
-    function loadFile(event) {
-        const reader = new FileReader();
-        reader.onload = function() {
-            const output = document.getElementById('avatar');
-            output.src = reader.result;
-        }
-        reader.readAsDataURL(event.target.files[0]);
+// Function to load the selected image
+function loadFile(event) {
+    const reader = new FileReader();
+    reader.onload = function() {
+        const output = document.getElementById('avatar');
+        output.src = reader.result;
     }
+    reader.readAsDataURL(event.target.files[0]);
+}
 
-    function getCookie(name) {
-        let cookieValue = null;
-        if (document.cookie && document.cookie !== '') {
-            const cookies = document.cookie.split(';');
-            for (let i = 0; i < cookies.length; i++) {
-                const cookie = cookies[i].trim();
-                // Check if this cookie string begins with the name we want
-                if (cookie.substring(0, name.length + 1) === (name + '=')) {
-                    cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
-                    break;
-                }
+// Function to get CSRF token
+function getCookie(name) {
+    let cookieValue = null;
+    if (document.cookie && document.cookie !== '') {
+        const cookies = document.cookie.split(';');
+        for (let i = 0; i < cookies.length; i++) {
+            const cookie = cookies[i].trim();
+            // Check if this cookie string begins with the name we want
+            if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                break;
             }
         }
-        return cookieValue;
     }
-    
+    return cookieValue;
+}
 
-    const csrftoken = getCookie('csrftoken'); 
+const csrftoken = getCookie('csrftoken');
+// Form Validation
+function validateForm() {
+    // Get current values from the form
+    const user_profile = document.getElementById('fileInput').files[0];
+    const name = document.getElementById('name').value.trim();
+    const dob = document.getElementById('dob').value.trim();
+    const gender = document.querySelector('input[name="gender"]:checked') ? document.querySelector('input[name="gender"]:checked').value : null;
 
-    // Add event listener to the form
-    document.getElementById('userDetailsForm').addEventListener('submit', function(event) {
-        event.preventDefault();
-    
+    // Clear previous errors
+    document.getElementById('avatarError').textContent = '';
+    document.getElementById('nameError').textContent = '';
+    document.getElementById('dobError').textContent = '';
+    document.getElementById('genderError').textContent = '';
+
+    // Flag for form validity
+    let isValid = true;
+
+    // Validate avatar
+    if (!user_profile) {
+        document.getElementById('avatarError').textContent = 'Please choose an avatar.';
+        isValid = false;
+    }
+
+    // Validate name
+    if (!name) {
+        document.getElementById('nameError').textContent = 'Name is required.';
+        isValid = false;
+    }
+
+    // Validate date of birth
+    if (!dob) {
+        document.getElementById('dobError').textContent = 'Date of birth is required.';
+        isValid = false;
+    }
+
+    // Validate gender
+    if (!gender) {
+        document.getElementById('genderError').textContent = 'Gender is required.';
+        isValid = false;
+    }
+
+    // Return true if the form is valid, false otherwise
+    return isValid;
+}
+
+// Add event listener to the form
+document.getElementById('donebtn').addEventListener("click",(event) => {
+    event.preventDefault();
+
+    // Check if the form is valid
+    if (validateForm()) {
+        // Get updated values after validation
         const user_profile = document.getElementById('fileInput').files[0];
-        const dob = document.getElementById('dob').value;
-        const gender = document.querySelector('input[name="gender"]:checked') ? document.querySelector('input[name="gender"]:checked').value : null;
-    
+        const name = document.getElementById('name').value.trim();
+        const dob = document.getElementById('dob').value.trim();
+        const gender = document.querySelector('input[name="gender"]:checked').value;
+
+        
+      // Create a FormData object to send the form data
         const formData = new FormData();
-        if (user_profile) formData.append('avatar', user_profile);
-        if (dob) formData.append('dob', dob);
-        if (gender) formData.append('gender', gender);
-    
-        // Fetch request with the CSRF token in the headers
-        fetch('/userdetails/', {
+        formData.append('name', name);
+        formData.append('avatar', user_profile);
+        formData.append('dob', dob);
+        formData.append('gender', gender);
+
+        fetch('/userdetails', {
             method: 'POST',
             body: formData,
             headers: {
-                'X-CSRFToken': csrftoken // Ensure this token is added to the request headers
+                accept: 'application/json',
+                'X-CSRFToken': csrftoken
             },
         })
         .then(response => {
-            if (!response.ok) {
-                throw new Error('Network response was not ok');
-            }
-            return response.json(); // Expect JSON response from the server
+            console.log(response);  // Log response to see what's being returned
+            return response.text();  // Read response as text to debug
         })
         .then(data => {
-            if (data.status === 'success') {
-                alert('Profile updated successfully!');
+            console.log(data);  // Check if it's returning HTML or JSON
+            try {
+                const jsonResponse = JSON.parse(data);  
+                if (jsonResponse.status === "success") {
+                    alert('Profile updated successfully!');
+                } else {
+                    alert('Failed to update profile.');
+                }
+                window.location.href = 'gamepage01'
+            } catch (error) {
+                console.error("Error parsing JSON:", error);
             }
         })
         .catch(error => {
-            console.error('Error:',error);
+            console.error(error);
         });
-    });
-    
+        
+    }
+});
+

@@ -42,11 +42,16 @@
 
             <div class="userProfile-wrapper">
                 <div>
-                    <img style=" border-radius: 50%; object-fit: cover;width: 50px;height: 50px;"
-                        src="{% static 'assets/large.png' %}" />
+                    {% if user_profile and user_profile.user_profile %}
+            <img style="border-radius: 50%; object-fit: cover; width: 50px; height: 50px;"
+                src="{{ user_profile.user_profile.url }}" />
+        {% else %}
+            <img style="border-radius: 50%; object-fit: cover; width: 50px; height: 50px;"
+                src="{% static 'assets/large.png' %}" />  
+        {% endif %}
                 </div>
                 <div>
-                    <p class="font-bold">Laurentia Clarissa</p>
+                    <p class="font-bold">{{name.name}}</p>
                     <p class="flex"><img src="{% static 'assets/ep_location-filled.png' %}" />Funland Arcade</p>
                 </div>
             </div>
@@ -88,47 +93,37 @@
                       <button class="card__btn">View More</button>
                     </div>
                   </div>
-            
-                  <!-- <div class="card swiper-slide">
+
+                  <div class="card swiper-slide">
                     <div class="card__image">
-                      <img src="./assets/images 1.png" alt="card image">
+                      <img src="{%static 'assets/images 1.png'%}" alt="card image">
                     </div>
             
                     <div class="card__content">
-                      <span class="card__title">Ui Designer</span>
-                      <span class="card__name">Sarah Bowen</span>
+                      <span class="card__title">Web Designer</span>
+                      <span class="card__name">Vanessa Martinez</span>
                       <p class="card__text">Lorem ipsum dolor sit, amet consectetur adipisicing elit. Sit veritatis labore provident non tempora odio est sunt, ipsum</p>
                       <button class="card__btn">View More</button>
                     </div>
-                  </div> -->
-            
-                  <!-- <div class="card swiper-slide">
+                  </div>
+
+                  <div class="card swiper-slide">
                     <div class="card__image">
-                      <img src="./assets/images 1.png" alt="card image">
+                      <img src="{%static 'assets/images 1.png'%}" alt="card image">
                     </div>
             
                     <div class="card__content">
-                      <span class="card__title">Web Developer</span>
-                      <span class="card__name">David Murphy</span>
+                      <span class="card__title">Web Designer</span>
+                      <span class="card__name">Vanessa Martinez</span>
                       <p class="card__text">Lorem ipsum dolor sit, amet consectetur adipisicing elit. Sit veritatis labore provident non tempora odio est sunt, ipsum</p>
                       <button class="card__btn">View More</button>
                     </div>
-                  </div> -->
+                  </div>
             
-                  <!-- <div class="card swiper-slide">
-                    <div class="card__image">
-                      <img src="./assets/images 1.png" alt="card image">
-                    </div>
-            
-                    <div class="card__content">
-                      <span class="card__title">Mobile Designer</span>
-                      <span class="card__name">Kelsey West</span>
-                      <p class="card__text">Lorem ipsum dolor sit, amet consectetur adipisicing elit. Sit veritatis labore provident non tempora odio est sunt, ipsum</p>
-                      <button class="card__btn">View More</button>
-                    </div>
-                  </div> -->
-            
+                  
                 </div>
+
+                
               </section>
             
         </div>
@@ -177,7 +172,7 @@
     <!-- Support Tab -->
 
     <div class="support-wrapper overflow-y p-4 hidden" id="support">
-        <div class="relative flex items-center justify-center  w-full  mt-2">
+        <div class="relative flex  items-center justify-center  w-full  mt-2">
             <a href="gamepage01" class="absolute left-0">
                 <img src="{% static 'assets/back.png'%}" alt="Back" class="w-6 h-6">
             </a>
@@ -200,9 +195,14 @@
                 </div>
             </div>
         </div>
+
+    <form id="supportForm">
+        {%csrf_token%}
         <div class="contact-atttachements-div">
+            <h1 class="font-semibold pt-3 text-lg">Title</h1>
+            <input class="support-input" name="title" id="title" placeholder="Title of issue..." />
             <h1 class="font-semibold pt-3 text-lg">Description</h1>
-            <textarea class="support-textarea" placeholder="What us going on..."></textarea>
+            <textarea class="support-textarea" name="description"  id="description" placeholder="What us going on..."></textarea>
             <h1 class="font-semibold  text-lg">Upload Attachment</h1>
             <div class="support-attachment relative" onclick="document.getElementById('fileInput').click()">
                 <div>
@@ -213,12 +213,11 @@
                 <input type="file" id="fileInput" accept="image/*" style="display: none;" />
             </div>
         </div>
-        <a href="gamepage01">
-            <button type="button"
-                class="btn items-center hover:bg-yellow-400 w-full py-2 mb-3 mt-3 rounded-full border border-gray-300 bg-yellow-400 font-bold text-gray-700">
+            <button type="submit"
+                class="btn items-center hover:bg-yellow-400 w-full py-2 mb-5 mt-3 rounded-full border border-gray-300 bg-yellow-400 font-bold text-gray-700">
                 Submit Ticket
             </button>
-        </a>
+    </form>
     </div>
 
     <!-- Scan -->
@@ -341,17 +340,23 @@
             </a>
                 <div class="profile-details-wrapper flex justify-center items-center ">
                     <div class="relative top-[160px] p-4">
-                        <div class="flex justify-center relative mx-auto bg-gray-400 w-20 h-20 rounded-full">
-                            <img id="avatar" src="{%static 'assets/large.png'%}" class="absolute object-cover w-20 h-20 rounded-full" />
-                            <div class="w-6 h-6 bottom-0 right-0 bg-yellow-400 rounded-full absolute cursor-pointer"
-                                onclick="document.getElementById('fileInput').click()">
-                                <img src="{%static 'assets/edit.png' %}" style="width:16px;" class="absolute top-1 left-1" />
+                        <div class="relative w-20 h-20 rounded-full  mx-auto bg-gray-300">
+                            {% if user_profile and user_profile.user_profile %}
+                                <img class="w-full h-full rounded-full object-cover" 
+                                     src="{{ user_profile.user_profile.url }}" />
+                            {% else %}
+                                <img class="w-full h-full object-cover" 
+                                     src="{% static 'assets/large.png' %}" />  
+                            {% endif %}
+                            <div class="absolute bottom-0 right-0 w-8 h-8 bg-yellow-400 rounded-full flex items-center justify-center shadow-md cursor-pointer">
+                                <img src="{% static 'assets/edit.png' %}" class="w-4 h-4" />
                             </div>
+                        </div>
+                        
                             <!-- Hidden File Input -->
                             <input type="file" id="fileInput" accept="image/*" style="display: none;" onchange="loadFile(event)" />
-                        </div>
-                        <h1 class="font-normal text-normal text-center pt-2 " >Laurentia Clarissa</h1>
-                    <h1 class="font-semibold text-center text-sm pt-1" >@Laurentia06</h1>
+                        <h1 class="font-normal text-normal text-center pt-2 " >{{name.name}}</h1>
+                    <h1 class="font-semibold text-center text-sm pt-1" >{{username}}</h1>
                     <div class="flex justify-center items-center" >
                         <img src="{%static 'assets/ep_location-filled.png'%}" />
                         <h1 class="font-semibold text-center text-sm pt-2" >Funland Arcade</h1>

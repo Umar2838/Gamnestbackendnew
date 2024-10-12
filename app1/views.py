@@ -6,8 +6,12 @@ from django.contrib.auth.models import User
 from django.utils.translation import gettext as _
 from django.contrib.auth import authenticate,login
 from django.contrib.auth.decorators import login_required
-from .models import UserProfile
+from .models import UserProfile,SupportTicket
 from django.http import JsonResponse
+import json
+from rest_framework import generics
+from .serializers import SupportTicketSerializer
+
 
 def index(request):
     return render(request,'index.html')
@@ -76,6 +80,7 @@ def resetPassword(request):
 def userdetails(request):
     if request.method == 'POST':
         user = request.user
+        name = request.POST.get('name')
         user_profile = request.FILES.get('avatar')
         dob = request.POST.get('dob')
         gender = request.POST.get('gender')
@@ -84,24 +89,61 @@ def userdetails(request):
         userdetails, created = UserProfile.objects.get_or_create(user=user)
 
         # Log the values to debug
-        print(f"Avatar: {user_profile}, DOB: {dob}, Gender: {gender}")
-
+        if name :
+            userdetails.name = name
         if user_profile:
-            userdetails.user_profile = user_profile  # Save the uploaded file
+            userdetails.user_profile = user_profile 
         if dob:
             userdetails.dob = dob
         if gender:
             userdetails.gender = gender
 
         userdetails.save()
-
-        return redirect('gamepage01')
+        return JsonResponse({'status':'success'})
     
     return render(request, 'userdetails.html')
 
-
+@login_required
 def gamepage01(request):
-    return render(request,'gamepage01.html')
+    user = request.user
+    try:
+        user_profile = UserProfile.objects.get(user=user)
+        name = UserProfile.objects.get(user=user) 
+    except UserProfile.DoesNotExist:
+        user_profile = None
+    return render(request,'gamepage01.html',{
+        'user': user,
+        'user_profile': user_profile,
+        'name':name
+    })
+from django.http import JsonResponse
+from .models import SupportTicket  # Assuming you have this model
+import json
+@login_required
+def supportTicket(request):
+    if request.method == 'POST':
+        try:
+            # Use request.POST for text fields and request.FILES for files
+            title = request.POST.get('title')
+            description = request.POST.get('description')
+            attachments = request.FILES.get('attachment')
+
+            if not title or not description or not attachments:
+                return JsonResponse({'error': "Ticket title, description, and attachment are required."}, status=400)
+
+            submitTicket = SupportTicket(
+                user_profile=request.user.userprofile,
+                title=title,
+                description=description,
+                attachment=attachments  # Make sure this field can accept file uploads
+            )         
+            submitTicket.save()
+            return JsonResponse({'status': 'success', 'message': 'Ticket submitted successfully.'})
+        except Exception as e:
+            return JsonResponse({'status': 'error', 'message': str(e)}, status=400)
+class TicketListView(generics.ListAPIView):
+    queryset = SupportTicket.objects.all()
+    serializer_class = SupportTicketSerializer
 def notification(request):
     return render(request,'notification.html')
 def seeAllgames(request):
@@ -111,9 +153,26 @@ def paymentMethod(request):
 def paymentconfirmation(request):
     return render(request,'paymentConfirmation.html')
 def successfulpayment(request):
-    return render(request,'successfulpayment.html')
+    return render(request,'successfulpayment.html') 
+@login_required
 def editProfile(request):
-    return render(request,'editProfile.html')
+    if request.user.is_authenticated:
+        user = request.user
+        username = request.user.username
+    print(user)
+    try:
+        user_profile = UserProfile.objects.get(user=user)
+        name = UserProfile.objects.get(user=user) 
+        dob = UserProfile.objects.get(user=user)
+        
+    except UserProfile.DoesNotExist:
+        user_profile = None
+    return render(request,'editprofile.html',{
+        'username': username,
+        'user_profile': user_profile,
+        'name':name,
+        'dob':dob
+    })
 def language(request):
     return render(request,'language.html')
 def location(request):
