@@ -14,7 +14,6 @@
       prevEl: ".swiper-button-prev",
     },
   
-    // And if we need scrollbar
     scrollbar: {
       el: ".swiper-scrollbar",
     },
@@ -26,18 +25,21 @@
     centeredSlides: true,
     slidesPerView: "auto",
     coverflowEffect: {
-      rotate: 50,
+      rotate: 0,
       stretch: 0,
-      depth: 100,
+      depth: 300,
       modifier: 1,
-      slideShadows: true,
+      slideShadows: false,
     },
     pagination: {
       el: ".swiper-pagination",
     },
   });
-  
-  
+
+  var swiper = new Swiper(".listmySwiper", {
+    slidesPerView: 5,
+    spaceBetween: 20,
+  });
   
   const icons = document.querySelectorAll('.icon-bar a');
   
@@ -241,3 +243,63 @@ support.addEventListener('submit', function (e) {
         alert('An error occurred while submitting the ticket.');
     });
 });
+
+
+// Edit profile functionality
+
+function loadFile(event) {
+  const reader = new FileReader();
+  reader.onload = function() {
+      const output = document.getElementById('avatar');
+      output.src = reader.result;
+  }
+  reader.readAsDataURL(event.target.files[0]);
+}
+
+const editForm = document.getElementById('editForm')
+
+editForm && editForm.addEventListener('submit',(e)=>{
+  e.preventDefault()
+
+const fname = document.getElementById('fname').value
+const username = document.getElementById('username').value
+const date = document.getElementById('date').value
+const email = document.getElementById('email').value
+const fileInputs = document.getElementById('fileInput')
+const fileInput = fileInputs.files[0]
+const currentPassword = document.getElementById('currentPassword').value
+const newPassword = document.getElementById('newPassword').value
+const confirmPassword = document.getElementById('confirmPassword').value
+  
+const formData = new formData()
+formData.append('fname',fname)
+formData.append('username',username)
+formData.append('date',date)
+formData.append('email',email)
+formData.append('fileInput',fileInput)
+formData.append('currentPassword',currentPassword)
+formData.append('newPassword',newPassword)
+formData.append('confirmPassword',confirmPassword)
+
+fetch('editProfile', {  
+  method: 'POST',
+  headers: {
+      'X-CSRFToken': csrftoken 
+  },
+  body: formData
+})
+.then(response => response.json())
+.then(data => {
+  if (data.status === 'success') {
+      alert('Profile updated successfully!');
+  } else {
+      alert('Failed to update the profile: ' + data.message);
+  }
+})
+.catch(error => {
+  console.error('Error:', error);
+  alert('An error occurred while updating the profile.');
+});
+
+
+})

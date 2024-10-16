@@ -12,58 +12,67 @@
     <title>Gamnest | Location</title>
 </head>
 <body>
-    <div class="location-wrapper p-4">
-        <div class="relative flex items-center justify-center w-full mt-2">
-            <a href="gamepage01" class="absolute left-0">
-                <img src="{% static 'assets/back.png'%}" alt="Back" class="w-6 h-6">
-            </a>
-            <div class="font-semibold text-xl">Edit Profile</div>
-        </div>
+  <div class="location-wrapper p-4">
+    <div class="relative flex items-center justify-center w-full mt-2">
+        <a href="gamepage01" class="absolute left-0">
+            <img src="{% static 'assets/back.png' %}" alt="Back" class="w-6 h-6">
+        </a>
+        <div class="font-semibold text-xl">Edit Profile</div>
+    </div>
+    
+   
+    <!-- Form Fields -->
+    <form id="editForm" method="post" enctype="multipart/form-data"> 
+        {% csrf_token %} 
         <div class="flex mt-5 justify-center relative mx-auto bg-gray-400 w-20 h-20 rounded-full mb-[-180px]">
-            <img id="avatar" src="{%static 'assets/large.png'%}" class="absolute  rounded-full" />
-            <div class="w-6 h-6 bottom-0 right-0 bg-yellow-400 rounded-full absolute cursor-pointer" onclick="document.getElementById('fileInput').click()">
-              <img src="{%static 'assets/camera.png'%}" style="width:16px;" class="absolute top-1 left-1" />
+          {% if user_profile and user_profile.user_profile %}
+          <img id="avatar" src="{{ user_profile.user_profile.url }}"  class="absolute w-20 h-20 object-cover rounded-full" />
+          {% else %}
+          <img style="border-radius: 50%; object-fit: cover; width: 50px; height: 50px;"
+          src="{% static 'assets/large.png' %}" />  
+          {% endif %}
+    
+          <div class="w-6 h-6 bottom-0 right-0 bg-yellow-400 rounded-full absolute cursor-pointer" onclick="document.getElementById('fileInput').click()">
+                <img src="{% static 'assets/camera.png' %}" style="width:16px;" class="absolute top-1 left-1" />
             </div>
             <!-- Hidden File Input -->
-            <input type="file" id="fileInput" accept="image/*" style="display: none;" onchange="loadFile(event)" />
-          </div>      
-          <!-- Form Fields -->
-          <div class="space-y-4 text-left">
+            <input type="file" id="fileInput" name="fileInput" accept="image/*" style="display: none;" onchange="loadFile(event)" />
+        </div>      
+        
+        <div class="space-y-4 text-left">
             <label class="block text-gray-700 relative text-sm font-medium">
-              Name
-              <div class="relative" >
-                <input type="text" name="fname" value="{{name.name}}" placeholder="Enter your full name" required class="w-full mt-1 px-4 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-yellow-400 caret-yellow-400 ">
-                {% if user_profile and user_profile.user_profile %}
-                <img class="absolute top-3 right-2 object-fit-cover" src="{%static 'assets/edit-2black.png'%}" />
-                {% else %}
-                <img class="absolute top-3 right-2 object-fit-cover" src="{%static 'assets/edit-2black.png'%}" />
-                {% endif %}
-
-              </div>
+                Name
+                <div class="relative">
+                    <input type="text" id="fname" name="fname" value="{{ user_profile.name }}" placeholder="Enter your full name" required class="w-full mt-1 px-4 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-yellow-400 caret-yellow-400">
+                   
+                    <img class="absolute top-3 right-2 object-fit-cover" src="{% static 'assets/edit-2black.png' %}" />
+                </div>
             </label>
-          <div class="space-y-4 text-left">
+            
             <label class="block text-gray-700 text-sm font-medium">
-              Username
-              <div class="relative" >
-                <input type="text" name="username" placeholder="Enter your username" value="{{username}}" class="w-full mt-1 px-4 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-yellow-400 caret-yellow-400 ">
-                <img class="absolute top-3 right-2 object-fit-cover" src="{%static 'assets/edit-2black.png'%}" />
-              </div>
+                Username
+                <div class="relative">
+                  <input type="text" name="username" id="username" placeholder="Enter your username" value="{{ user_profile.user.username }}" class="w-full mt-1 px-4 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-yellow-400 caret-yellow-400">
+                  <img class="absolute top-3 right-2 object-fit-cover" src="{% static 'assets/edit-2black.png' %}" />
+                </div>
             </label>
-      
+            
             <label class="block text-gray-700 text-sm font-medium relative">
-              Date of birth
-              <div class="relative">
-                <input type="date" name="date" id="datepicker" value="{dob.dob}" class="w-full mt-1 px-4 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-yellow-400 caret-yellow-400">
-              </div>
+                Date of birth
+                <div class="relative">
+                    <input type="date" name="date" id="date" value="{% if user_profile.dob %}{{ user_profile.dob|date:'Y-m-d' }}{% endif %}" class="w-full mt-1 px-4 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-yellow-400 caret-yellow-400">
+                </div>
             </label>
+            
             <label class="block text-gray-700 text-sm font-medium">
                 Email
                 <div class="relative">
-                  <input type="text" name="email" placeholder="Enter your email" value="{{user.email}}" class="w-full mt-1 px-4 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-yellow-400 caret-yellow-400 ">
-                  <img class="absolute top-3 right-2 object-fit-cover" src="{%static 'assets/edit-2black.png'%}" />
+                    <input type="text" name="email" id="email" placeholder="Enter your email" value="{{ user_profile.user.email }}" class="w-full mt-1 px-4 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-yellow-400 caret-yellow-400">
+                    <img class="absolute top-3 right-2 object-fit-cover" src="{% static 'assets/edit-2black.png' %}" />
                 </div>
-              </label>
-              <div class="flex justify-between items-center">
+            </label>
+            
+            <div class="flex justify-between items-center">
                 <div>Change Password?</div>
                 <div>
                     <label class="switch">
@@ -75,58 +84,54 @@
             
             <!-- Password fields container -->
             <div id="passwordFields">
-                <label class="block text-gray-700 text-sm font-medium relative">
-                    Current Password
-                    <div class="relative">
-                        <input id="currentPassword" required type="password" name="currentpassword" placeholder="Enter your current password"
-                               class="w-full mt-1 px-4 py-2 border focus:ring-yellow-300 caret-yellow-300 border-gray-300 rounded focus:outline-none focus:ring-2">
-                        <span class="absolute inset-y-0 right-3 flex items-center cursor-pointer"
-                              onclick="togglePasswordVisibility('currentPassword')">
-                            <i id="toggleIconCurrent" class="fas fa-eye-slash text-gray-500"></i>
-                        </span>
-                    </div>
-                </label>
-            
-                <label class="block text-gray-700 text-sm font-medium relative">
-                    New Password
-                    <div class="relative">
-                        <input id="newPassword" name="newpassword" required type="password" placeholder="Enter new password"
-                               class="w-full mt-1 px-4 py-2 border focus:ring-yellow-300 caret-yellow-300 border-gray-300 rounded focus:outline-none focus:ring-2">
-                        <span class="absolute inset-y-0 right-3 flex items-center cursor-pointer"
-                              onclick="togglePasswordVisibility('newPassword')">
-                            <i id="toggleIconNew" class="fas fa-eye-slash text-gray-500"></i>
-                        </span>
-                    </div>
-                    <p class="text-gray-400 font-normal">Password must be at least 8 characters long!</p>
-                </label>
-            
-                <label class="block text-gray-700 pt-4 text-sm font-medium relative">
-                    Confirm New Password
-                    <div class="relative">
-                        <input id="confirmPassword" required type="password" placeholder="Enter new password"
-                               class="w-full mt-1 px-4 py-2 border focus:ring-yellow-300 caret-yellow-300 border-gray-300 rounded focus:outline-none focus:ring-2">
-                        <span class="absolute inset-y-0 right-3 flex items-center cursor-pointer"
-                              onclick="togglePasswordVisibility('confirmPassword')">
-                            <i id="toggleIconConfirm" class="fas fa-eye-slash text-gray-500"></i>
-                        </span>
-                    </div>
-                    <p class="text-gray-400 font-normal">Make sure your password matches the password above!</p>
-                </label>
-            </div>
-            
-            <a href="gamepage01" >
-              <button  type="button" class="btn items-center hover:bg-yellow-400 w-full py-2 mb-3 mt-4 rounded-full border border-gray-300  font-bold text-gray-700">
-                Done
-              </button>
-              </a>
+              <label class="block text-gray-700 text-sm font-medium relative">
+                  Current Password
+                  <div class="relative">
+                      <input id="currentPassword" type="password" name="currentPassword" placeholder="Enter your current password" class="w-full mt-1 px-4 py-2 border focus:ring-yellow-300 caret-yellow-300 border-gray-300 rounded focus:outline-none focus:ring-2">
+                      <span class="absolute inset-y-0 right-3 flex items-center cursor-pointer" onclick="togglePasswordVisibility('currentPassword')">
+                          <i id="toggleIconCurrentPassword" class="fas fa-eye-slash text-gray-500"></i>
+                      </span>
+                  </div>
+              </label>
+              <label class="block text-gray-700 text-sm font-medium relative">
+                  New Password
+                  <div class="relative">
+                      <input id="newPassword" name="newPassword" type="password" placeholder="Enter new password" class="w-full mt-1 px-4 py-2 border focus:ring-yellow-300 caret-yellow-300 border-gray-300 rounded focus:outline-none focus:ring-2">
+                      <span class="absolute inset-y-0 right-3 flex items-center cursor-pointer" onclick="togglePasswordVisibility('newPassword')">
+                          <i id="toggleIconNewPassword" class="fas fa-eye-slash text-gray-500"></i>
+                      </span>
+                  </div>
+                  <p class="text-gray-400 font-normal">Password must be at least 8 characters long!</p>
+              </label>
+          
+              <label class="block text-gray-700 pt-4 text-sm font-medium relative">
+                  Confirm New Password
+                  <div class="relative">
+                      <input id="confirmPassword" name="confirmPassword" type="password" placeholder="Enter new password" class="w-full mt-1 px-4 py-2 border focus:ring-yellow-300 caret-yellow-300 border-gray-300 rounded focus:outline-none focus:ring-2">
+                      <span class="absolute inset-y-0 right-3 flex items-center cursor-pointer" onclick="togglePasswordVisibility('confirmPassword')">
+                          <i id="toggleIconConfirmPassword" class="fas fa-eye-slash text-gray-500"></i>
+                      </span>
+                  </div>
+                  <p class="text-gray-400 font-normal">Make sure your password matches the password above!</p>
+              </label>
           </div>
-    </div>
+          
+
+            
+            <button type="submit" class="btn items-center hover:bg-yellow-400 w-full py-2 mb-3 mt-4 rounded-full border border-gray-300 font-bold text-gray-700">
+                Done
+            </button>
+        </div>
+    </form>
+</div>
+
     <script src="https://kit.fontawesome.com/da726f302a.js" crossorigin="anonymous"></script>
+    <script src="{% static 'js/game.js'%}"></script>
 
     <script>
-      function togglePasswordVisibility() {
-          const passwordInput = document.getElementById('password');
-          const toggleIcon = document.getElementById('toggleIcon');
+      function togglePasswordVisibility(fieldId) {
+          const passwordInput = document.getElementById(fieldId);
+          const toggleIcon = document.getElementById('toggleIcon' + fieldId.charAt(0).toUpperCase() + fieldId.slice(1));
           if (passwordInput.type === 'password') {
               passwordInput.type = 'text';
               toggleIcon.classList.remove('fa-eye-slash');
@@ -146,21 +151,8 @@
         }
     });
 
-    // Function to toggle password visibility
-    function togglePasswordVisibility(passwordFieldId) {
-        const passwordField = document.getElementById(passwordFieldId);
-        const toggleIcon = document.querySelector(`#toggleIcon${passwordFieldId.charAt(0).toUpperCase() + passwordFieldId.slice(1)}`);
+    
 
-        if (passwordField.type === "password") {
-            passwordField.type = "text";
-            toggleIcon.classList.remove('fa-eye-slash');
-            toggleIcon.classList.add('fa-eye');
-        } else {
-            passwordField.type = "password";
-            toggleIcon.classList.remove('fa-eye');
-            toggleIcon.classList.add('fa-eye-slash');
-        }
-    }
   </script>
    
 </body>

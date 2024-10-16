@@ -9,4 +9,4 @@ class SupportTicketSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = SupportTicket
-        fields = ['id', 'title', 'description', 'attachment', 'created_at', 'user_name', 'profile_picture']
+        fields = ['id', 'title', 'description', 'attachment', 'created_at', 'user_name', 'profile_picture','useremail']

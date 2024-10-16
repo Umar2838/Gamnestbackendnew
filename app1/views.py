@@ -1,4 +1,4 @@
-from django.shortcuts import render,redirect
+from django.shortcuts import render,redirect,HttpResponse
 from django.contrib.auth.models import User
 from django.contrib import messages
 from app1.form import UserRegistrationForm,LoginForm
@@ -11,6 +11,8 @@ from django.http import JsonResponse
 import json
 from rest_framework import generics
 from .serializers import SupportTicketSerializer
+from django.contrib.auth.password_validation import validate_password
+from django.core.exceptions import ValidationError
 
 
 def index(request):
@@ -24,9 +26,10 @@ def signupemail(request):
             username = form.cleaned_data['username']
             useremail = form.cleaned_data['email']
             userpassword = form.cleaned_data['password']
-            User.objects.create_user(username, useremail, userpassword)
+            user = User.objects.create_user(username, useremail, userpassword)
+            user.save()
             messages.success(request, _("Registration successful! Welcome, %(username)s."), {'username': username})
-            return redirect('userdetails') 
+            return redirect('loginemail') 
         else:
             for error in form.errors.values():
                 messages.error(request, error)
@@ -55,7 +58,7 @@ def loginemail(request):
                 if not remember_me:
                     request.session.set_expiry(0)  
                 messages.success(request, "Login successful!")
-                return redirect('userdetails') 
+                return redirect('gamepage01') 
             else:
                 messages.error(request, "Invalid username or password")
         else:
@@ -76,7 +79,6 @@ def emailverifymessage(request):
 def resetPassword(request):
     return render(request,'resetpassword.html')
 
-@login_required
 def userdetails(request):
     if request.method == 'POST':
         user = request.user
@@ -86,7 +88,7 @@ def userdetails(request):
         gender = request.POST.get('gender')
 
         # Update or create the UserProfile
-        userdetails, created = UserProfile.objects.get_or_create(user=user)
+        userdetails ,created = UserProfile.objects.get_or_create(user=user)
 
         # Log the values to debug
         if name :
@@ -103,7 +105,6 @@ def userdetails(request):
     
     return render(request, 'userdetails.html')
 
-@login_required
 def gamepage01(request):
     user = request.user
     try:
@@ -119,9 +120,12 @@ def gamepage01(request):
 from django.http import JsonResponse
 from .models import SupportTicket  # Assuming you have this model
 import json
-@login_required
+
 def supportTicket(request):
     if request.method == 'POST':
+        if request.user.is_authenticated:
+            user = request.user
+            email = user.email
         try:
             # Use request.POST for text fields and request.FILES for files
             title = request.POST.get('title')
@@ -133,6 +137,7 @@ def supportTicket(request):
 
             submitTicket = SupportTicket(
                 user_profile=request.user.userprofile,
+                useremail = email,
                 title=title,
                 description=description,
                 attachment=attachments  # Make sure this field can accept file uploads
@@ -156,23 +161,76 @@ def successfulpayment(request):
     return render(request,'successfulpayment.html') 
 @login_required
 def editProfile(request):
-    if request.user.is_authenticated:
-        user = request.user
-        username = request.user.username
-    print(user)
+    user = request.user
     try:
         user_profile = UserProfile.objects.get(user=user)
-        name = UserProfile.objects.get(user=user) 
-        dob = UserProfile.objects.get(user=user)
-        
+
+        if request.method == 'POST':
+          
+
+            fileInput = request.FILES.get('fileInput')
+            fname = request.POST.get('fname')
+            username = request.POST.get('username')
+            email = request.POST.get('email')
+            date = request.POST.get('date')
+            currentPassword = request.POST.get('currentPassword')
+            newPassword = request.POST.get('newPassword')
+            confirmPassword = request.POST.get('confirmPassword')
+
+
+            # Debugging prints
+            print(f"fname: {fname}, username: {username}, date: {date}, fileInput: {fileInput}, currentPassword:{currentPassword},newPassword:{newPassword},confirmPassword:{confirmPassword},")
+
+            # Update user fields
+            if username:
+                user.username = username
+            if email:
+                user.email = email    
+            user.save()    
+           
+
+            # Update UserProfile fields
+            if fname:
+                user_profile.name = fname
+            if date:
+                user_profile.dob = date
+            if fileInput:
+                user_profile.user_profile = fileInput
+            user_profile.save()
+            if currentPassword:
+                if not user.check_password(currentPassword):
+                    return JsonResponse({'error': 'Current password is incorrect.'}, status=400)
+
+        # Step 2: Check if the new password matches confirm password
+            if newPassword and currentPassword:
+                if newPassword != confirmPassword:
+                    return JsonResponse({'error': 'New password and confirm password do not match.'}, status=400)
+
+            try:
+                validate_password(newPassword,user=user)
+            except ValidationError as e:
+                return JsonResponse({'error': e.messages}, status=400)
+            
+            user.set_password(newPassword)
+            user.save()
+
+            return redirect('loginemail')
+
+
+        return render(request, 'editprofile.html', {
+                'username': user.username,
+                'email': user.email,
+                'user_profile': user_profile,
+                'name': user_profile.name,
+                'dob': user_profile.dob,
+            })
     except UserProfile.DoesNotExist:
-        user_profile = None
-    return render(request,'editprofile.html',{
-        'username': username,
-        'user_profile': user_profile,
-        'name':name,
-        'dob':dob
-    })
+        return HttpResponse("Profile not found", status=404)
+
+
+
+
+
 def language(request):
     return render(request,'language.html')
 def location(request):

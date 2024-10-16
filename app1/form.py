@@ -58,10 +58,21 @@ class UserRegistrationForm(forms.ModelForm):
             'email': 'Email',
         }
 
+    
+    
+    def clean_username(self):
+        username = self.cleaned_data.get('username')
+        if User.objects.filter(username=username).exists():
+             raise forms.ValidationError("Username already exists")
+        if not re.search(r"[!@#$%^&*(),.?\":{}|<>]", username):
+            raise forms.ValidationError("Username must contain at least one special character.")
+        return username   
+
     def clean_email(self):
         email = self.cleaned_data.get('email')
         if User.objects.filter(email=email).exists():
             raise forms.ValidationError("Email already exists.")
+        
         return email
 
     def clean_password(self):

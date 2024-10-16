@@ -72,19 +72,16 @@ function validateForm() {
 }
 
 // Add event listener to the form
-document.getElementById('donebtn').addEventListener("click",(event) => {
+document.getElementById('donebtn').addEventListener("click", (event) => {
     event.preventDefault();
 
     // Check if the form is valid
     if (validateForm()) {
-        // Get updated values after validation
         const user_profile = document.getElementById('fileInput').files[0];
         const name = document.getElementById('name').value.trim();
         const dob = document.getElementById('dob').value.trim();
         const gender = document.querySelector('input[name="gender"]:checked').value;
 
-        
-      // Create a FormData object to send the form data
         const formData = new FormData();
         formData.append('name', name);
         formData.append('avatar', user_profile);
@@ -95,32 +92,20 @@ document.getElementById('donebtn').addEventListener("click",(event) => {
             method: 'POST',
             body: formData,
             headers: {
-                accept: 'application/json',
-                'X-CSRFToken': csrftoken
+                'X-CSRFToken': csrftoken  // CSRF token added
             },
         })
-        .then(response => {
-            console.log(response);  // Log response to see what's being returned
-            return response.text();  // Read response as text to debug
-        })
+        .then(response => response.json())
         .then(data => {
-            console.log(data);  // Check if it's returning HTML or JSON
-            try {
-                const jsonResponse = JSON.parse(data);  
-                if (jsonResponse.status === "success") {
-                    alert('Profile updated successfully!');
-                } else {
-                    alert('Failed to update profile.');
-                }
-                window.location.href = 'gamepage01'
-            } catch (error) {
-                console.error("Error parsing JSON:", error);
+            if (data.status === "success") {
+                alert('Profile updated successfully!');
+                window.location.href = '/gamepage01';  // Redirect to game page
+            } else {
+                alert('Failed to update profile.');
             }
         })
         .catch(error => {
-            console.error(error);
+            console.error('Error:', error);
         });
-        
     }
 });
-

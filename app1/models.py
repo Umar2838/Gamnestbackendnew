@@ -15,6 +15,7 @@ class UserProfile(models.Model):
 
 class SupportTicket(models.Model):
     user_profile = models.ForeignKey(UserProfile, on_delete=models.CASCADE)
+    useremail = models.EmailField(max_length=255 , null=True)
     title = models.CharField(max_length=200)
     description = models.TextField()
     attachment = models.FileField(upload_to='tickets/attachments/', null=True, blank=True)

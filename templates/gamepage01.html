@@ -15,7 +15,6 @@
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800;900&display=swap"
         rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
-
 </head>
 
 <body>
@@ -62,8 +61,8 @@
             <img class="filter-icon" src="{% static '/assets/filter.png' %}" />
         </div>
 
-        <div class="swiper ">
-            <div class="swiper-wrapper ">
+        <div class="swiper">
+            <div class="swiper-wrapper">
                 <!-- Slides -->
                 <img class="swiper-slide" src="{% static '/assets/Ads.png' %}" />
                 <img class="swiper-slide" src="{% static '/assets/Ads.png' %}" />
@@ -76,57 +75,7 @@
             <h1 class="font-bold text-2xl pt-7">Hot Games</h1>
         </div>
 
-        <div class="hotgames-wrapper" >
-            <section class="swiper mySwiper">
-
-                <div class="swiper-wrapper">
-            
-                  <div class="card swiper-slide">
-                    <div class="card__image">
-                      <img src="{%static 'assets/images 1.png'%}" alt="card image">
-                    </div>
-            
-                    <div class="card__content">
-                      <span class="card__title">Web Designer</span>
-                      <span class="card__name">Vanessa Martinez</span>
-                      <p class="card__text">Lorem ipsum dolor sit, amet consectetur adipisicing elit. Sit veritatis labore provident non tempora odio est sunt, ipsum</p>
-                      <button class="card__btn">View More</button>
-                    </div>
-                  </div>
-
-                  <div class="card swiper-slide">
-                    <div class="card__image">
-                      <img src="{%static 'assets/images 1.png'%}" alt="card image">
-                    </div>
-            
-                    <div class="card__content">
-                      <span class="card__title">Web Designer</span>
-                      <span class="card__name">Vanessa Martinez</span>
-                      <p class="card__text">Lorem ipsum dolor sit, amet consectetur adipisicing elit. Sit veritatis labore provident non tempora odio est sunt, ipsum</p>
-                      <button class="card__btn">View More</button>
-                    </div>
-                  </div>
-
-                  <div class="card swiper-slide">
-                    <div class="card__image">
-                      <img src="{%static 'assets/images 1.png'%}" alt="card image">
-                    </div>
-            
-                    <div class="card__content">
-                      <span class="card__title">Web Designer</span>
-                      <span class="card__name">Vanessa Martinez</span>
-                      <p class="card__text">Lorem ipsum dolor sit, amet consectetur adipisicing elit. Sit veritatis labore provident non tempora odio est sunt, ipsum</p>
-                      <button class="card__btn">View More</button>
-                    </div>
-                  </div>
-            
-                  
-                </div>
-
-                
-              </section>
-            
-        </div>
+      
 
 
         <div>
@@ -155,7 +104,7 @@
         </div>
 
 
-        <div class="flex justify-between items-center mb-5">
+        <div class="flex justify-between items-center mb-2">
             <div>
                 <h1 class="font-bold text-2xl ">For you</h1>
             </div>
@@ -165,7 +114,84 @@
                 </a>
             </div>
         </div>
-
+        
+        <div style="margin-bottom:50px;border-radius: none; padding: 10px;" class="swiper listmySwiper">
+            <div  class="swiper-wrapper" >
+              <div class="swiper-slide swiperCard">
+                <img src="{%static 'assets/images 1.png'%}" />
+                <div class="category-text">
+                    <div class="flex gap-2 items-center justify-center" style="font-size: 12px;"  ><div>4.5</div><div >⭐⭐⭐⭐</div></div>
+                    <p class="font-semibold text-white">PacMan</p>
+                    <p class="text-[#CCCCCC]">Arcade</p>
+                </div>
+              </div>
+              <div class="swiper-slide swiperCard">
+                <img src="{%static 'assets/images 1.png'%}" />
+                <div class="category-text">
+                    <div class="flex gap-2 items-center justify-center" style="font-size: 12px;"  ><div>4.5</div><div >⭐⭐⭐⭐</div></div>
+                    <p class="font-semibold text-white">PacMan</p>
+                    <p class="text-[#CCCCCC]">Arcade</p>
+                </div>
+              </div>
+              <div class="swiper-slide swiperCard">
+                <img src="{%static 'assets/images 1.png'%}" />
+                <div class="category-text">
+                    <div class="flex gap-2 items-center justify-center" style="font-size: 12px;"  ><div>4.5</div><div >⭐⭐⭐⭐</div></div>
+                    <p class="font-semibold text-white">PacMan</p>
+                    <p class="text-[#CCCCCC]">Arcade</p>
+                </div>
+              </div>
+              <div class="swiper-slide swiperCard">
+                <img src="{%static 'assets/images 1.png'%}" />
+                <div class="category-text">
+                    <div class="flex gap-2 items-center justify-center" style="font-size: 12px;"  ><div>4.5</div><div >⭐⭐⭐⭐</div></div>
+                    <p class="font-semibold text-white">PacMan</p>
+                    <p class="text-[#CCCCCC]">Arcade</p>
+                </div>
+              </div>
+              <div class="swiper-slide swiperCard">
+                <img src="{%static 'assets/images 1.png'%}" />
+                <div class="category-text">
+                    <div class="flex gap-2 items-center justify-center" style="font-size: 12px;"  ><div>4.5</div><div >⭐⭐⭐⭐</div></div>
+                    <p class="font-semibold text-white">PacMan</p>
+                    <p class="text-[#CCCCCC]">Arcade</p>
+                </div>
+              </div>
+              <div class="swiper-slide swiperCard">
+                <img src="{%static 'assets/images 1.png'%}" />
+                <div class="category-text">
+                    <div class="flex gap-2 items-center justify-center" style="font-size: 12px;"  ><div>4.5</div><div >⭐⭐⭐⭐</div></div>
+                    <p class="font-semibold text-white">PacMan</p>
+                    <p class="text-[#CCCCCC]">Arcade</p>
+                </div>
+              </div>
+              <div class="swiper-slide swiperCard">
+                <img src="{%static 'assets/images 1.png'%}" />
+                <div class="category-text">
+                    <div class="flex gap-2 items-center justify-center" style="font-size: 12px;"  ><div>4.5</div><div >⭐⭐⭐⭐</div></div>
+                    <p class="font-semibold text-white">PacMan</p>
+                    <p class="text-[#CCCCCC]">Arcade</p>
+                </div>
+              </div>
+              <div class="swiper-slide swiperCard">
+                <img src="{%static 'assets/images 1.png'%}" />
+                <div class="category-text">
+                    <div class="flex gap-2 items-center justify-center" style="font-size: 12px;"  ><div>4.5</div><div >⭐⭐⭐⭐</div></div>
+                    <p class="font-semibold text-white">PacMan</p>
+                    <p class="text-[#CCCCCC]">Arcade</p>
+                </div>
+              </div>
+              <div class="swiper-slide swiperCard">
+                <img src="{%static 'assets/images 1.png'%}" />
+                <div class="category-text">
+                    <div class="flex gap-2 items-center justify-center" style="font-size: 12px;"  ><div>4.5</div><div >⭐⭐⭐⭐</div></div>
+                    <p class="font-semibold text-white">PacMan</p>
+                    <p class="text-[#CCCCCC]">Arcade</p>
+                </div>
+              </div>
+            </div>
+            <div class="swiper-pagination"></div>
+          </div>
      
     </div>
 
@@ -356,7 +382,7 @@
                             <!-- Hidden File Input -->
                             <input type="file" id="fileInput" accept="image/*" style="display: none;" onchange="loadFile(event)" />
                         <h1 class="font-normal text-normal text-center pt-2 " >{{name.name}}</h1>
-                    <h1 class="font-semibold text-center text-sm pt-1" >{{username}}</h1>
+                    <h1 class="font-semibold text-center text-sm pt-1" >{{user.email}}</h1>
                     <div class="flex justify-center items-center" >
                         <img src="{%static 'assets/ep_location-filled.png'%}" />
                         <h1 class="font-semibold text-center text-sm pt-2" >Funland Arcade</h1>
@@ -481,23 +507,7 @@
                 console.error("QR Code scanning failed", err);
             });
         });
-    var swiper = new Swiper(".mySwiper", {
-      effect: "coverflow",
-      grabCursor: true,
-      centeredSlides: true,
-      slidesPerView: "auto",
-      coverflowEffect: {
-        rotate: 0,
-        stretch: 0,
-        depth: 300,
-        modifier: 1,
-        slideShadows: false,
-      },
-      pagination: {
-        el: ".swiper-pagination",
-      },
-    });
-
+    
 
     </script>
     <script src="{% static 'js/game.js'%}"></script>
