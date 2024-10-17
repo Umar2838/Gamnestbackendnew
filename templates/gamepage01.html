@@ -309,35 +309,40 @@
             </div>
         </div>
 
+        <div class="ticketavailability"   id="ticketavailability" >
+            <p class="text-center pt-1" >Select the type of ticket you want to use</p>
+            <div class="ticket-availabe">
+                <div><img src="{% static 'assets/star-2 1.png'%}" /> </div>
+                <div>
+                    <h1 class="font-bold">Single <span class="font-light">ticket</span></h1>
+                </div>
+                <button type="button" class="ticket-buy font-bold">5</button>
+            </div>
+            <div class="ticket-availabe">
+                <div><img src="{% static 'assets/star-2 1.png'%}" /> </div>
+                <div>
+                    <h1 class="font-bold">1 hour <span class="font-light">ticket</span></h1>
+                </div>
+                <button type="button" class="ticket-buy font-bold">5</button>
+            </div>
+        </div>
+
+        <div class="ticketnonavailability" style="margin-bottom: 60px;"  id="ticketnonavailability" >
+            <p class="text-center font-bold pt-4" >No tickets available</p>
+            <a   href="#ticket" data-target="ticket"> 
+                <button type="button"
+                    class="btn mt-4 mb-4 next-btn w-11/12 ml-4 hover:bg-yellow-400  py-2  rounded-full border border-gray-300 bg-yellow-400 font-bold text-gray-700">
+                    Buy Now
+                </button>
+            </a>
+        </div>
+
     </div>
 
-    <div class="ticketavailability"   id="ticketavailability" >
-        <p class="text-center pt-1" >Select the type of ticket you want to use</p>
-        <div class="ticket-availabe">
-            <div><img src="{% static 'assets/star-2 1.png'%}" /> </div>
-            <div>
-                <h1 class="font-bold">Single <span class="font-light">ticket</span></h1>
-            </div>
-            <button type="button" class="ticket-buy font-bold">5</button>
-        </div>
-        <div class="ticket-availabe">
-            <div><img src="{% static 'assets/star-2 1.png'%}" /> </div>
-            <div>
-                <h1 class="font-bold">1 hour <span class="font-light">ticket</span></h1>
-            </div>
-            <button type="button" class="ticket-buy font-bold">5</button>
-        </div>
-    </div>
 
-    <div class="ticketnonavailability" style="display:none" id="ticketnonavailability" >
-        <p class="text-center font-bold pt-4" >No tickets available</p>
-        <a   href="paymentconfirmation">
-            <button type="button"
-                class="btn mt-4 next-btn w-11/12 ml-4 hover:bg-yellow-400  py-2  rounded-full border border-gray-300 bg-yellow-400 font-bold text-gray-700">
-                Next
-            </button>
-        </a>
-    </div>
+  
+
+   
     
 <!-- Tickets tab -->
     

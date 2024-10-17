@@ -317,19 +317,19 @@ var swiper = new Swiper(".gamesmySwiper", {
   },
 });
 window.addEventListener("load", function () {
+  const ticketavailability = document.getElementById("ticketavailability");
+  const ticketnonavailability = document.getElementById("ticketnonavailability");
+  const appBody = document.getElementById("qr"); 
   const qrCodeSuccessCallback = (decodedText, decodedResult) => {
-      const ticketavailability = document.getElementById("ticketavailability");
-      const appBody = document.body; // Assuming the entire page should blur
-
-      // Log the detected QR code value
-      alert(`QR Code detected: ${decodedText}`);
-
+  console.log(decodedResult)
       if (decodedText === "Arcade plaza") {
           // Add the class to animate the ticketavailability div
-          ticketavailability.classList.add("ticket-animate");
+          ticketnonavailability.classList.add("ticket-animate");
           // Add the blur class to blur the background
           appBody.classList.add("blur-background");
       }
+
+      
   };
 
   const config = {
@@ -351,6 +351,11 @@ window.addEventListener("load", function () {
   ).catch((err) => {
       console.error("QR Code scanning failed", err);
   });
+
+  appBody.addEventListener("click",()=>{
+    ticketnonavailability.classList.remove("ticket-animate")
+    appBody.classList.remove("blur-background")
+  })
 });
 
     

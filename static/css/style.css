@@ -416,6 +416,17 @@ box-shadow: 0px 4px 8px -2px #1018281A;
   transition: bottom 0.5s ease; 
   z-index: 999;
 }
+.ticketnonavailability {
+  width: 100%;
+  margin-bottom: 60px;
+  border-radius: 20px 20px 0px 0px;
+  position: absolute;
+   bottom: -100%;
+  left: 0;
+  background-color: white;
+  transition: bottom 0.5s ease; 
+  z-index: 999;
+}
 
 .ticket-animate {
   bottom: 0px  ; 
