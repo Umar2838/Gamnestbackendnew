@@ -9,7 +9,10 @@ class UserProfile(models.Model):
     user_profile = models.ImageField(upload_to='avatars/', null=True, blank=True)
     dob = models.DateField(null=True, blank=True)
     gender = models.CharField(max_length=10, choices=(('Male', 'Male'), ('Female', 'Female')), null=True, blank=True)
-
+    forgetPasswordToken = models.CharField(max_length=100 , null=True)
+    selected_location = models.CharField(max_length=255, blank=True, null=True)
+    latitude = models.DecimalField(max_digits=9, decimal_places=6, blank=True, null=True)
+    longitude = models.DecimalField(max_digits=9, decimal_places=6, blank=True, null=True)
     def __str__(self):
         return self.user.username 
 

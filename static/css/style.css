@@ -119,16 +119,21 @@ margin-bottom: 10px;
   align-items: center;
 }
 /* hot games start */
-.swiper{
+.games-slide {
   width: 100%;
-  border-radius:10px;
+
 }
 
-.swiper-wrapper{
+.games-slide {
+  background-position: center;
+  background-size: cover;
+  width: 160px;
+  height: 200px;
+}
+
+.games-slide img {
+  display: block;
   width: 100%;
-  height: 35em;
-  display: flex;
-  align-items: center;
 }
 
 /* hot games end */
@@ -138,7 +143,7 @@ margin-bottom: 10px;
 
 }
 .categories-slider{
-    height:100%;
+    width:100%;
 }
 .category-img{
     border-radius: 18px;
@@ -281,7 +286,6 @@ box-shadow: 0px 1px 3px 0px #1018281A;
       background: #fff;
       display: flex;
       justify-content: center;
-      margin-bottom: 10px;
       align-items: center;
       
     }
@@ -370,50 +374,59 @@ box-shadow: 0px 4px 8px -2px #1018281A;
 }
 .qr-scanner {
     display: flex;
-    justify-content: center;
+    flex-direction: column;
     align-items: center;
-    position: relative;
     width: 100%;
-    height: 50vh;
-    /* background-color: #333; */
+    height: 100vh;
     margin-top: 20px;
+    border-radius: 20px;
+
 }
 
 #qr-video-container {
     position: relative;
-    width: 400px;
-    height: 400px;
+    width: 300px;
 }
 
 #qr-video {
     width: 500px;
     height: 500px;
     object-fit: cover;
+    border-radius: 20px !important;
+
 }
 
-.viewfinder {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 500px;
-    height: 600px;
-    border: 5px solid transparent;
-    border-radius: 12px;
-    border-top-color: white;
-    border-bottom-color: white;
-    border-left-color: white;
-    border-right-color: white;
-    border-radius: 10px;
-    box-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
-}
 
 /* Instructions text */
 .instructions {
     text-align: center;
-    margin-top: 30px;
+    padding-top: 10px;
     color: #666;
     font-size: 16px;
 }
+/* Initial styles for ticketavailability */
+.ticketavailability {
+  width: 100%;
+  margin-bottom: 60px;
+  border-radius: 20px 20px 0px 0px;
+  position: absolute;
+   bottom: -100%;
+  left: 0;
+  background-color: white;
+  transition: bottom 0.5s ease; 
+  z-index: 999;
+}
+
+.ticket-animate {
+  bottom: 0px  ; 
+}
+/* Class to blur the background */
+.blur-background {
+  transition: filter 0.5s ease;
+  background-color:#0c0c0c64
+}
+
+
 .ticket-owned{
   box-shadow: 0px 4px 6px -2px #10182808;
 box-shadow: 0px 12px 16px -4px #10182814;
@@ -421,7 +434,6 @@ border-radius: 12px;
 padding:14px 15px 14px 15px;
 }
 .ticket-availabe{
-  box-shadow: 0px 2px 4px -2px #1018280F;
   box-shadow: 0px 4px 8px -2px #1018281A;
   width:100%;
   padding:12px;

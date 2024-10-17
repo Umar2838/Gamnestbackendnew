@@ -303,3 +303,56 @@ fetch('editProfile', {
 
 
 })
+
+var swiper = new Swiper(".gamesmySwiper", {
+  effect: "coverflow",
+  grabCursor: true,
+
+  slidesPerView: 3,
+  coverflowEffect: {
+    rotate: 50,
+    stretch: 0,
+    depth: 20,
+    modifier: 1,
+  },
+});
+window.addEventListener("load", function () {
+  const qrCodeSuccessCallback = (decodedText, decodedResult) => {
+      const ticketavailability = document.getElementById("ticketavailability");
+      const appBody = document.body; // Assuming the entire page should blur
+
+      // Log the detected QR code value
+      alert(`QR Code detected: ${decodedText}`);
+
+      if (decodedText === "Arcade plaza") {
+          // Add the class to animate the ticketavailability div
+          ticketavailability.classList.add("ticket-animate");
+          // Add the blur class to blur the background
+          appBody.classList.add("blur-background");
+      }
+  };
+
+  const config = {
+      fps: 10,
+      qrbox: {
+          width: 250,
+          height: 250
+      }
+  };
+
+  // Create an instance of the QR scanner
+  const qrCodeScanner = new Html5Qrcode("qr-video-container");
+
+  // Start scanning the QR code
+  qrCodeScanner.start(
+      { facingMode: "environment" },
+      config,
+      qrCodeSuccessCallback
+  ).catch((err) => {
+      console.error("QR Code scanning failed", err);
+  });
+});
+
+    
+
+  

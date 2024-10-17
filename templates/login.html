@@ -11,54 +11,52 @@
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
 </head>
 
-<body class="flex items-center justify-center w-full h-screen">
-    <div class="login-wrapper p-6 mb-auto w-full bg-white text-center">
-        <div class="relative flex items-center justify-center w-full mb-4">
-            <a href="./loginshow" class="absolute left-0">
-                <img src="{% static 'assets/back.png' %}" alt="Back" class="w-6 h-6">
-            </a>
-            <div class="font-semibold text-xl">
-                Login
-            </div>
+<div class="login-wrapper p-6 mb-auto w-full bg-white text-center">
+    <div class="relative flex items-center justify-center w-full mb-4">
+        <a href="./loginshow" class="absolute left-0">
+            <img src="{% static 'assets/back.png' %}" alt="Back" class="w-6 h-6">
+        </a>
+        <div class="font-semibold text-xl">
+            Login
         </div>
+    </div>
 
-        <p class="text-gray-400 mb-6 text-lg">Enter your registered username</p>
+    <p class="text-gray-400 mb-6 text-lg">Enter your registered username</p>
 
-        <!-- Render the form -->
-        <form method="POST" action="">
-            {% csrf_token %}
-            <div class="space-y-4 text-left">
-                
-                <!-- Username Input -->
-                <label class="block text-gray-700 text-sm font-medium">
-                    Username
-                    <input required type="text" name="username" placeholder="Enter your username"
-                        class="w-full mt-1 px-4 py-2 border border-gray-300 focus:ring-yellow-300 caret-yellow-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
-                        value="{{ form.username.value|default_if_none:'' }}">
-                </label>
-                <!-- Error for Username -->
-                {% if form.username.errors %}
-                <p class="text-red-500 text-sm mt-1">{{ form.username.errors.0 }}</p>
-                {% endif %}
+    <!-- Render the form -->
+    <form method="POST" action="">
+        {% csrf_token %}
 
-                <!-- Password Input -->
-                <label class="block text-gray-700 text-sm font-medium relative">
-                    Password
-                    <div class="relative">
-                        <input id="password" required name="password" type="password" placeholder="••••••••"
-                            class="w-full mt-1 px-4 py-2 border focus:ring-yellow-300 caret-yellow-300 border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500">
-                        <span class="absolute inset-y-0 right-3 flex items-center cursor-pointer"
-                            onclick="togglePasswordVisibility()">
-                            <i id="toggleIcon" class="fas fa-eye-slash text-gray-500"></i>
-                        </span>
-                    </div>
-                </label>
-                <!-- Error for Password -->
-                {% if form.password.errors %}
-                <p class="text-red-500 text-sm mt-1">{{ form.password.errors.0 }}</p>
-                {% endif %}
-                
-            </div>
+        <div class="space-y-4 text-left">
+            <!-- Username Input -->
+            <label class="block text-gray-700 text-sm font-medium">
+                Username
+                <input required type="text" name="username" placeholder="Enter your username"
+                    class="w-full mt-1 px-4 py-2 border border-gray-300 focus:ring-yellow-300 caret-yellow-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    value="{{ form.username.value|default_if_none:'' }}">
+            </label>
+            <!-- Error for Username -->
+            {% if form.username.errors %}
+            <p class="text-red-500 text-sm mt-1">{{ form.username.errors.0 }}</p>
+            {% endif %}
+
+            <!-- Password Input -->
+            <label class="block text-gray-700 text-sm font-medium relative">
+                Password
+                <div class="relative">
+                    <input id="password" required name="password" type="password" placeholder="••••••••"
+                        class="w-full mt-1 px-4 py-2 border focus:ring-yellow-300 caret-yellow-300 border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500">
+                    <span class="absolute inset-y-0 right-3 flex items-center cursor-pointer"
+                        onclick="togglePasswordVisibility()">
+                        <i id="toggleIcon" class="fas fa-eye-slash text-gray-500"></i>
+                    </span>
+                </div>
+            </label>
+            <!-- Error for Password -->
+            {% if errormessage %}
+            <p class="text-red-500 text-sm mt-1">{{ errormessage }}</p>
+            {% endif %}
+        </div>
             <div class="flex justify-between items-center mt-4">
                 <div>
                     <input type="checkbox" name="remember_me" class="accent-yellow-300" />

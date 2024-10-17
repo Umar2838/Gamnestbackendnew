@@ -25,7 +25,7 @@
     <div>
         <img class="logo" src="{% static 'assets/sent_email.png' %}" />
          <p class="text-[32px] font-bold " >Check your Email!</p>
-         <p class="max-w-[250px] text-center">We've sent a password recovery to laurentiacl@mail.com</p>
+         <p class="max-w-[250px] text-center">We've sent a password recovery to {{email.email}}</p>
          <a href="./resetPassword">
 
              <button class="btn text-center mt-[200px] bg-yellow-400 border font-bold w-full py-2 rounded-full">Open Email</button>

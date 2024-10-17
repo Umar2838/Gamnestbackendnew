@@ -60,10 +60,7 @@ def loginemail(request):
                 messages.success(request, "Login successful!")
                 return redirect('gamepage01') 
             else:
-                messages.error(request, "Invalid username or password")
-        else:
-
-            messages.error(request, "Please correct the errors below.")
+                errormessage = messages.error(request, "Invalid username or password")
     else:
         form = LoginForm()
 
@@ -234,6 +231,31 @@ def editProfile(request):
 def language(request):
     return render(request,'language.html')
 def location(request):
+    if request.method == 'POST':
+        try:
+            data = json.loads(request.body)
+            location = data.get('location')
+            latitude = data.get('latitude', None)
+            longitude = data.get('longitude', None)
+
+            # Assuming you have a UserProfile model linked to the user
+            user_profile = UserProfile.objects.get(user=request.user)
+
+            if location == 'current':
+                user_profile.latitude = latitude
+                user_profile.longitude = longitude
+            else:
+                user_profile.selected_location = location
+                user_profile.latitude = None  # Clear any previous coordinates
+                user_profile.longitude = None
+
+            user_profile.save()
+
+            return JsonResponse({'status': 'success', 'message': 'Location saved successfully'})
+        except Exception as e:
+            print(e)
+            return JsonResponse({'status': 'error', 'message': 'An error occurred'})
+    
     return render(request,'location.html')
 def setting(request):
     return render(request,'setting.html')
