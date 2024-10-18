@@ -309,7 +309,7 @@
             </div>
         </div>
 
-        <div class="ticketavailability"   id="ticketavailability" >
+        <!-- <div class="ticketavailability"   id="ticketavailability" >
             <p class="text-center pt-1" >Select the type of ticket you want to use</p>
             <div class="ticket-availabe">
                 <div><img src="{% static 'assets/star-2 1.png'%}" /> </div>
@@ -325,9 +325,9 @@
                 </div>
                 <button type="button" class="ticket-buy font-bold">5</button>
             </div>
-        </div>
+        </div> -->
 
-        <div class="ticketnonavailability" style="margin-bottom: 60px;"  id="ticketnonavailability" >
+        <div class="ticketnonavailability" style="display: none"  id="ticketnonavailability" >
             <p class="text-center font-bold pt-4" >No tickets available</p>
             <a   href="#ticket" data-target="ticket"> 
                 <button type="button"
@@ -362,34 +362,36 @@
             </div>
             <div class="custom-swiper-pagination"></div>
         </div>
-        <div class="ticket-availabe">
+        {% for tickets in tickets %}
+        <div id="{{tickets.id}}" class="ticket-availabe">
             <div><img src="{%static '/assets/star-2 1.png'%}" /> </div>
             <div>
-                <h1 class="font-bold">Single <span class="font-light">ticket</span></h1>
+                <h1 class="font-bold">{{tickets.name}} <span class="font-light">ticket</span></h1>
             </div>
-            <a class="ticket-buy" href="paymentMethod"><button>€5.00</button></a>
+            <a class="ticket-buy" href="paymentMethod"><button>{{tickets.price}}</button></a>
         </div>
-        <div class="ticket-availabe">
+        {% endfor %}
+        <!-- <div class="ticket-availabe">
             <div><img src="{% static 'assets/star-2 1.png'%}" /> </div>
             <div>
                 <h1 class="font-bold">Bundle of 10 <span class="font-light">ticket</span></h1>
             </div>
             <a class="ticket-buy" href="paymentMethod"><button>€20.00</button></a>
-        </div>
-        <div class="ticket-availabe">
+        </div> -->
+        <!-- <div class="ticket-availabe">
             <div><img src="{%static 'assets/star-2 1.png'%}" /> </div>
             <div>
                 <h1 class="font-bold">1 hour <span class="font-light">ticket</span></h1>
             </div>
             <a class="ticket-buy" href="paymentMethod"><button>€20.00</button></a>
-        </div>
-        <div class="ticket-availabe">
+        </div> -->
+        <!-- <div class="ticket-availabe">
             <div><img src="{%static 'assets/star-2 1.png'%}" /> </div>
             <div>
                 <h1 class="font-bold">2 hour <span class="font-light">ticket</span></h1>
             </div>
             <a class="ticket-buy" href="paymentMethod"><button>€30.00</button></a>
-        </div>
+        </div> -->
     </div>
 
     <!-- Owned Tickets -->

@@ -13,6 +13,7 @@ from rest_framework import generics
 from .serializers import SupportTicketSerializer
 from django.contrib.auth.password_validation import validate_password
 from django.core.exceptions import ValidationError
+import requests
 
 
 def index(request):
@@ -107,16 +108,19 @@ def gamepage01(request):
     try:
         user_profile = UserProfile.objects.get(user=user)
         name = UserProfile.objects.get(user=user) 
+        response = requests.get('http://localhost:8000/api/getTickets/')
+        tickets = response.json()
+        print(tickets)
     except UserProfile.DoesNotExist:
         user_profile = None
     return render(request,'gamepage01.html',{
         'user': user,
         'user_profile': user_profile,
-        'name':name
+        'name':name,
+        'tickets':tickets
     })
-from django.http import JsonResponse
-from .models import SupportTicket  # Assuming you have this model
-import json
+
+
 
 def supportTicket(request):
     if request.method == 'POST':
@@ -143,9 +147,11 @@ def supportTicket(request):
             return JsonResponse({'status': 'success', 'message': 'Ticket submitted successfully.'})
         except Exception as e:
             return JsonResponse({'status': 'error', 'message': str(e)}, status=400)
+        
 class TicketListView(generics.ListAPIView):
     queryset = SupportTicket.objects.all()
     serializer_class = SupportTicketSerializer
+    
 def notification(request):
     return render(request,'notification.html')
 def seeAllgames(request):

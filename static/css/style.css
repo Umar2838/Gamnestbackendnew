@@ -386,6 +386,7 @@ box-shadow: 0px 4px 8px -2px #1018281A;
 #qr-video-container {
     position: relative;
     width: 300px;
+    height: 300px;
 }
 
 #qr-video {
@@ -418,7 +419,7 @@ box-shadow: 0px 4px 8px -2px #1018281A;
 }
 .ticketnonavailability {
   width: 100%;
-  margin-bottom: 60px;
+  margin-bottom: 50px;
   border-radius: 20px 20px 0px 0px;
   position: absolute;
    bottom: -100%;
@@ -429,7 +430,7 @@ box-shadow: 0px 4px 8px -2px #1018281A;
 }
 
 .ticket-animate {
-  bottom: 0px  ; 
+  bottom: 0  ; 
 }
 /* Class to blur the background */
 .blur-background {

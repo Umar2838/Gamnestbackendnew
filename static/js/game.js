@@ -324,6 +324,7 @@ window.addEventListener("load", function () {
   console.log(decodedResult)
       if (decodedText === "Arcade plaza") {
           // Add the class to animate the ticketavailability div
+          ticketnonavailability.style.display = "block"
           ticketnonavailability.classList.add("ticket-animate");
           // Add the blur class to blur the background
           appBody.classList.add("blur-background");
@@ -353,11 +354,12 @@ window.addEventListener("load", function () {
   });
 
   appBody.addEventListener("click",()=>{
+    ticketnonavailability.style.display = "none"
     ticketnonavailability.classList.remove("ticket-animate")
     appBody.classList.remove("blur-background")
   })
 });
 
-    
 
-  
+
+    
