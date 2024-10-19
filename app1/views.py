@@ -108,7 +108,7 @@ def gamepage01(request):
     try:
         user_profile = UserProfile.objects.get(user=user)
         name = UserProfile.objects.get(user=user) 
-        response = requests.get('http://localhost:8000/api/getTickets/')
+        response = requests.get('http://107.23.241.131/api/getTickets/')
         tickets = response.json()
         print(tickets)
     except UserProfile.DoesNotExist:
