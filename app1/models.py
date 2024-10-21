@@ -26,3 +26,14 @@ class SupportTicket(models.Model):
 
     def __str__(self):
         return self.title
+
+
+class PurchasedTickets(models.Model):
+    user = models.ForeignKey(User,on_delete=models.CASCADE)
+    ticketid = models.IntegerField(null=True, blank=True)
+    ticketname = models.CharField(max_length=255,null=True,blank=True)
+    ticketprice = models.CharField(max_length=255,null=True,blank=True) 
+    ticket_count = models.IntegerField(default=1)  # Field to track how many times the user bought the same ticket
+
+    def __str__(self):
+        return self.ticketname

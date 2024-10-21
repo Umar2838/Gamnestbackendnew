@@ -64,13 +64,18 @@
       ".game-wrapper, .support-wrapper, .qr-wrapper, .ticket-wrapper, .profile-wrapper"
     );
     sections.forEach((section) => {
-      section.classList.add("hidden"); // Add 'hidden' class to hide the section
+      section.classList.add("hidden");
+      document.getElementById("ownedticket").style.display="none"
+      // Add 'hidden' class to hide the section
     });
   
     // Show the selected section
     const targetSection = document.getElementById(targetId);
     if (targetSection) {
-      targetSection.classList.remove("hidden"); // Remove 'hidden' class to show the section
+      targetSection.classList.remove("hidden"); 
+  
+      document.getElementById("ownedticket").style.display="none"
+
     }
   
     // Remove 'active' class from all icons
@@ -210,7 +215,7 @@ document.addEventListener("DOMContentLoaded", function () {
   
   // Support tab functionality
   const support = document.getElementById('supportForm');
-support.addEventListener('submit', function (e) {
+support && support.addEventListener('submit', function (e) {
     e.preventDefault();  
     const title = document.getElementById('title').value;
     const description = document.getElementById('description').value;
@@ -286,7 +291,7 @@ fetch('editProfile', {
   headers: {
       'X-CSRFToken': csrftoken 
   },
-  body: formData
+  body: JSON.stringify(formData)
 })
 .then(response => response.json())
 .then(data => {
@@ -316,25 +321,37 @@ var swiper = new Swiper(".gamesmySwiper", {
     modifier: 1,
   },
 });
+
+
 window.addEventListener("load", function () {
-  const ticketavailability = document.getElementById("ticketavailability");
-  const ticketnonavailability = document.getElementById("ticketnonavailability");
   const appBody = document.getElementById("qr"); 
+  const ticketAvailability = document.getElementById("ticketavailability");
+  const ticketNonAvailability = document.getElementById("ticketnonavailability");
+
+  // QR code scanning success callback
   const qrCodeSuccessCallback = (decodedText, decodedResult) => {
-  console.log(decodedResult)
+      console.log(decodedResult);
+      
+      // Check if the QR code text is "Arcade plaza"
       if (decodedText === "Arcade plaza") {
-          // Add the class to animate the ticketavailability div
-          ticketnonavailability.style.display = "block"
-          ticketnonavailability.classList.add("ticket-animate");
-          // Add the blur class to blur the background
+          // If the `ticketAvailability` element exists, show it
+          if (ticketAvailability && ticketAvailability.children.length > 0) {
+              ticketAvailability.style.display = "block";
+              ticketAvailability.classList.add("ticket-animate");
+          } else {
+              // Otherwise, show the no tickets available message
+              ticketNonAvailability.style.display = "block";
+              ticketNonAvailability.classList.add("ticket-animate");
+          }
+          
+          // Add blur effect to the background
           appBody.classList.add("blur-background");
       }
-
-      
   };
 
+  // Configuration for QR code scanner
   const config = {
-      fps: 10,
+      fps: 90,
       qrbox: {
           width: 250,
           height: 250
@@ -346,20 +363,88 @@ window.addEventListener("load", function () {
 
   // Start scanning the QR code
   qrCodeScanner.start(
-      { facingMode: "environment" },
+      { facingMode: "environment" }, // Use the environment camera
       config,
       qrCodeSuccessCallback
   ).catch((err) => {
       console.error("QR Code scanning failed", err);
   });
 
-  appBody.addEventListener("click",()=>{
-    ticketnonavailability.style.display = "none"
-    ticketnonavailability.classList.remove("ticket-animate")
-    appBody.classList.remove("blur-background")
-  })
+  // Hide availability and remove blur when clicking on appBody
+  appBody.addEventListener("click", () => {
+      if (ticketNonAvailability) {
+          ticketNonAvailability.style.display = "none";
+          ticketNonAvailability.classList.remove("ticket-animate");
+      }
+
+      if (ticketAvailability) {
+          ticketAvailability.style.display = "none";
+          ticketAvailability.classList.remove("ticket-animate");
+      }
+
+      appBody.classList.remove("blur-background");
+  });
 });
 
 
 
+
     
+// ==========================Ticket data =======================================
+
+
+
+  // Select all elements with the class 'ticket-buy'
+const ticketButtons = document.querySelectorAll('.ticket-buy');
+
+ticketButtons.forEach(button => {
+    button.addEventListener('click', function(event) {
+        // Prevent the default anchor click behavior
+        event.preventDefault();
+
+        const ticketId = this.getAttribute('data-id');
+        const ticketName = this.getAttribute('data-name');
+        const ticketPrice = this.getAttribute('data-price');
+
+        // Create a ticket object
+        const ticketData = {
+            id: ticketId,
+            name: ticketName,
+            price: ticketPrice
+        };
+
+        // Save to local storage
+        localStorage.setItem('selectedTicket', JSON.stringify(ticketData));
+
+        // Optionally, redirect to the payment method page
+        window.location.href = 'paymentMethod'; // Adjust the URL as needed
+    });
+});
+
+// ======================================Product Information===================================
+
+ // Retrieve ticket data from local storage
+ const ticketData = JSON.parse(localStorage.getItem('selectedTicket'));
+
+ // Check if ticket data exists
+ if (ticketData) {
+     // Update the product name
+     document.querySelector('.productname').textContent = ticketData.name;
+
+     // Update the product subtotal, total payment, and Buy Now price
+     document.getElementById('subtotal').textContent = ticketData.price;
+     document.getElementById('total').textContent = ticketData.price;
+     document.getElementById('buy-now-price').textContent = ticketData.price;
+
+     fetch("paymentconfirmation",{
+     method: 'POST',
+     headers: {
+         'Content-Type': 'application/json',
+         'X-CSRFTOKEN':csrftoken
+     },
+     body: JSON.stringify(ticketData)
+ })
+ } else {
+     console.error('No ticket data found in local storage.');
+ }
+

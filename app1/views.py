@@ -6,7 +6,8 @@ from django.contrib.auth.models import User
 from django.utils.translation import gettext as _
 from django.contrib.auth import authenticate,login
 from django.contrib.auth.decorators import login_required
-from .models import UserProfile,SupportTicket
+from .models import UserProfile,SupportTicket,PurchasedTickets
+from django.db.models import Sum
 from django.http import JsonResponse
 import json
 from rest_framework import generics
@@ -108,16 +109,23 @@ def gamepage01(request):
     try:
         user_profile = UserProfile.objects.get(user=user)
         name = UserProfile.objects.get(user=user) 
-        response = requests.get('http://107.23.241.131/api/getTickets/')
+        response = requests.get('http://127.0.0.1:8000/api/getTickets/')
         tickets = response.json()
-        print(tickets)
+        purchasedTicket = PurchasedTickets.objects.filter(user=user)
+        total_count = PurchasedTickets.objects.filter(user=user).aggregate(total=Sum('ticket_count'))['total']
+
+
     except UserProfile.DoesNotExist:
         user_profile = None
+
+   
     return render(request,'gamepage01.html',{
         'user': user,
         'user_profile': user_profile,
         'name':name,
-        'tickets':tickets
+        'tickets':tickets,
+        'purchasedTicket':purchasedTicket,
+        'totalcount':total_count
     })
 
 
@@ -158,11 +166,35 @@ def seeAllgames(request):
     return render(request,'seeAllgames.html')
 def paymentMethod(request):
     return render(request,'paymentMethod.html')
+
 def paymentconfirmation(request):
-    return render(request,'paymentConfirmation.html')
+    if request.method == 'POST':
+        # Parse the data from the frontend (ticket info sent via fetch request)
+        ticket_data = json.loads(request.body)
+        ticket_id = ticket_data.get('id')
+        ticket_name = ticket_data.get('name')
+        ticket_price = ticket_data.get('price')
+
+        # Check if the user already has this ticket in their purchases
+        purchased_ticket, created = PurchasedTickets.objects.get_or_create(
+            user=request.user,
+            ticketid=ticket_id,
+            defaults={
+                'ticketname': ticket_name,
+                'ticketprice': ticket_price,
+            }
+        )
+
+        if not created:
+            purchased_ticket.ticket_count += 1
+            purchased_ticket.save()
+
+        return JsonResponse({'message': 'Ticket purchase recorded successfully'}, status=200)
+
+    return render(request, 'paymentConfirmation.html')
+
 def successfulpayment(request):
     return render(request,'successfulpayment.html') 
-@login_required
 def editProfile(request):
     user = request.user
     try:
@@ -200,23 +232,26 @@ def editProfile(request):
             if fileInput:
                 user_profile.user_profile = fileInput
             user_profile.save()
-            if currentPassword:
-                if not user.check_password(currentPassword):
-                    return JsonResponse({'error': 'Current password is incorrect.'}, status=400)
+
+            if currentPassword and  newPassword and newPassword:
+
+                if currentPassword:
+                    if not user.check_password(currentPassword):
+                        return JsonResponse({'error': 'Current password is incorrect.'}, status=400)
+            
 
         # Step 2: Check if the new password matches confirm password
-            if newPassword and currentPassword:
-                if newPassword != confirmPassword:
-                    return JsonResponse({'error': 'New password and confirm password do not match.'}, status=400)
+                if newPassword and currentPassword:
+                    if newPassword != confirmPassword:
+                        return JsonResponse({'error': 'New password and confirm password do not match.'}, status=400)
 
-            try:
-                validate_password(newPassword,user=user)
-            except ValidationError as e:
-                return JsonResponse({'error': e.messages}, status=400)
+                try:
+                    validate_password(newPassword,user=user)
+                except ValidationError as e:
+                    return JsonResponse({'error': e.messages}, status=400)
             
-            user.set_password(newPassword)
-            user.save()
-
+                user.set_password(newPassword)
+                user.save()
             return redirect('loginemail')
 
 
