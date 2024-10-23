@@ -30,11 +30,10 @@ def signupemail(request):
             userpassword = form.cleaned_data['password']
             user = User.objects.create_user(username, useremail, userpassword)
             user.save()
-            messages.success(request, _("Registration successful! Welcome, %(username)s."), {'username': username})
             return redirect('loginemail') 
         else:
             for error in form.errors.values():
-                messages.error(request, error)
+                errormessage = messages.error(request, error)
     else:
         form = UserRegistrationForm()
     return render(request, 'signupemail.html', {'form': form})
@@ -60,7 +59,7 @@ def loginemail(request):
                 if not remember_me:
                     request.session.set_expiry(0)  
                 messages.success(request, "Login successful!")
-                return redirect('gamepage01') 
+                return redirect('userdetails') 
             else:
                 errormessage = messages.error(request, "Invalid username or password")
     else:
@@ -87,29 +86,32 @@ def userdetails(request):
         gender = request.POST.get('gender')
 
         # Update or create the UserProfile
-        userdetails ,created = UserProfile.objects.get_or_create(user=user)
+        userdetails, created = UserProfile.objects.get_or_create(user=user)
 
-        # Log the values to debug
-        if name :
+        if name:
             userdetails.name = name
         if user_profile:
-            userdetails.user_profile = user_profile 
+            userdetails.user_profile = user_profile
         if dob:
             userdetails.dob = dob
         if gender:
             userdetails.gender = gender
 
         userdetails.save()
-        return JsonResponse({'status':'success'})
-    
+
+        # Return success response as JSON
+        return JsonResponse({'status': 'success'})
+
+    # For non-POST requests, render the HTML page
     return render(request, 'userdetails.html')
 
 def gamepage01(request):
     user = request.user
+    print(user)
     try:
         user_profile = UserProfile.objects.get(user=user)
         name = UserProfile.objects.get(user=user) 
-        response = requests.get('http://127.0.0.1:8000/api/getTickets/')
+        response = requests.get('http://107.23.241.131/api/getTickets/')
         tickets = response.json()
         purchasedTicket = PurchasedTickets.objects.filter(user=user)
         total_count = PurchasedTickets.objects.filter(user=user).aggregate(total=Sum('ticket_count'))['total']
@@ -159,6 +161,8 @@ def supportTicket(request):
 class TicketListView(generics.ListAPIView):
     queryset = SupportTicket.objects.all()
     serializer_class = SupportTicketSerializer
+
+
     
 def notification(request):
     return render(request,'notification.html')
@@ -232,6 +236,7 @@ def editProfile(request):
             if fileInput:
                 user_profile.user_profile = fileInput
             user_profile.save()
+            
 
             if currentPassword and  newPassword and newPassword:
 
@@ -252,7 +257,7 @@ def editProfile(request):
             
                 user.set_password(newPassword)
                 user.save()
-            return redirect('loginemail')
+                return redirect('loginemail')
 
 
         return render(request, 'editprofile.html', {
@@ -272,8 +277,10 @@ def editProfile(request):
 def language(request):
     return render(request,'language.html')
 def location(request):
+    
     if request.method == 'POST':
         try:
+            
             data = json.loads(request.body)
             location = data.get('location')
             latitude = data.get('latitude', None)

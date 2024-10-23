@@ -88,24 +88,36 @@ document.getElementById('donebtn').addEventListener("click", (event) => {
         formData.append('dob', dob);
         formData.append('gender', gender);
 
-        fetch('/userdetails', {
+        fetch('userdetails', {
             method: 'POST',
-            body: formData,
             headers: {
                 'X-CSRFToken': csrftoken  // CSRF token added
             },
+            body: formData,
         })
-        .then(response => response.json())
+        .then(response => {
+            if (!response.ok) {
+                // Handle HTTP errors
+                throw new Error(`HTTP error! Status: ${response.status}`);
+            }
+            return response.json(); // Try to parse JSON only if the response is ok
+        })
         .then(data => {
             if (data.status === "success") {
-                alert('Profile updated successfully!');
-                window.location.href = '/gamepage01';  // Redirect to game page
+                const successAlert = document.getElementById("success-alert")
+            successAlert.classList.add("successanimate")  // Show with animation
+            setTimeout(function(){
+                successAlert.classList.remove("successanimate")  // Hide after a while
+            }, 1500)
+                window.location.href = 'gamepage01'; 
             } else {
                 alert('Failed to update profile.');
             }
         })
         .catch(error => {
-            console.error('Error:', error);
+            console.error('Error:', error); // Log the error for debugging
+            alert('An error occurred. Please try again.');
         });
+        
     }
 });

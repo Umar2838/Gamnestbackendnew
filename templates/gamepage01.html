@@ -71,7 +71,7 @@
         </div>
 
         <div class="swiper">
-            <div class="swiper-wrapper overflow-hidden">
+            <div class="swiper-wrapper">
                 <!-- Slides -->
                 <img class="swiper-slide" src="{% static '/assets/Ads.png' %}" />
                 <img class="swiper-slide" src="{% static '/assets/Ads.png' %}" />
@@ -239,7 +239,7 @@
 
     <!-- Support Tab -->
 
-    <div class="support-wrapper overflow-y p-4 hidden" id="support">
+    <div class="support-wrapper p-4 hidden" id="support">
         <div class="relative flex  items-center justify-center  w-full  mt-2">
             <a href="gamepage01" class="absolute left-0">
                 <img src="{% static 'assets/back.png'%}" alt="Back" class="w-6 h-6">
@@ -286,11 +286,13 @@
                 Submit Ticket
             </button>
     </form>
+    <div class='success-alert' id="success-alert" ><span style="display: inline-block; font-size: 14px;font-weight: bold; margin-right:4px; color: #000000; background: #f9c034; border-radius: 100px; padding: 0px 6px;">✓</span>Ticket submitted sucessfully !</div>
+
     </div>
 
     <!-- Scan -->
 
-    <div class="qr-wrapper hidden p-4 overflow-y" id="qr">
+    <div class="qr-wrapper hidden p-4" id="qr">
         <div class="relative flex items-center justify-center  w-full  mt-2">
             <a href="gamepage01" class="absolute left-0">
                 <img src="{% static 'assets/back.png'%}" alt="Back" class="w-6 h-6">

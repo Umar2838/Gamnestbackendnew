@@ -238,7 +238,11 @@ support && support.addEventListener('submit', function (e) {
     .then(response => response.json())
     .then(data => {
         if (data.status === 'success') {
-            alert('Ticket submitted successfully!');
+          const successAlert = document.getElementById("success-alert")
+          successAlert.classList.add("successanimate")  // Show with animation
+          setTimeout(function(){
+              successAlert.classList.remove("successanimate")  // Hide after a while
+          }, 1500)
         } else {
             alert('Failed to submit the ticket: ' + data.message);
         }
@@ -448,3 +452,5 @@ ticketButtons.forEach(button => {
      console.error('No ticket data found in local storage.');
  }
 
+
+ 
