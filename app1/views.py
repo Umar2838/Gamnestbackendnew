@@ -307,4 +307,3 @@ def location(request):
     return render(request,'location.html')
 def setting(request):
     return render(request,'setting.html')
-
